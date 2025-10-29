@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontline Daily</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+
+        body {
+            background-color: #58010100;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('a.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            padding-top: 2rem;
+        }
+
+        .logo-container {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #2e1a1a, #3e2616);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(200, 0, 0, 0.2);
+            animation: subtle-pulse 8s infinite;
+            border: 1px solid rgba(100, 100, 150, 0.2);
+        }
+
+        .logo i {
+            color: #4a6fa5;
+        }
+
+        @keyframes subtle-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(200, 0, 0, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(200, 0, 0, 0.3); }
+        }
+
+        h1 {
+            font-size: 3rem;
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+            color: #000000;
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+
+        .twitter-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #a54a4a;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .twitter-link:hover {
+            color: #6a8fc5;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: #a0a0a0;
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .live-feed-container {
+            position: relative;
+            overflow: hidden;
+            height: 500px;
+            border: 1px solid rgba(100, 100, 150, 0.2);
+            background: rgba(25, 10, 10, 0.7);
+            padding: 1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .live-feed-title {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(40, 20, 20, 0.8);
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            color: #ffffff;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .live-feed {
+            margin-top: 2.5rem;
+            height: calc(100% - 2.5rem);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .feed-items {
+            position: absolute;
+            width: 100%;
+            animation: scroll-up 40s linear infinite;
+        }
+
+        .feed-item {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(150, 100, 100, 0.1);
+            opacity: 0;
+            animation: fade-in 1s forwards;
+        }
+
+        @keyframes scroll-up {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
+        }
+
+        @keyframes fade-in {
+            to { opacity: 1; }
+        }
+
+        .feed-time {
+            color: #fafafa;
+            font-size: 0.85rem;
+            margin-right: 1rem;
+        }
+
+        .feed-token {
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .feed-change {
+            margin-right: 0.5rem;
+        }
+
+        .feed-change.negative {
+            color: #c55;
+        }
+
+        .feed-change.positive {
+            color: #5c5;
+        }
+
+        .archive-container {
+            border: 1px solid rgba(100, 100, 150, 0.2);
+            background: rgba(25, 10, 10, 0.7);
+            padding: 1.5rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .archive-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .archive-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .archive-item {
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(100, 100, 150, 0.1);
+        }
+
+        .archive-item:last-child {
+            border-bottom: none;
+        }
+
+        .archive-token {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #e0e0e0;
+        }
+
+        .archive-description {
+            color: #a0a0a0;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .archive-time {
+            color: #fff3f3;
+            font-size: 0.9rem;
+        }
+
+        .submission-container {
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid rgba(100, 100, 150, 0.2);
+            background: rgba(25, 10, 10, 0.7);
+            padding: 2rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .submission-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(20, 25, 40, 0.5);
+            border: 1px solid rgba(100, 100, 150, 0.3);
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            background: rgba(30, 40, 70, 0.7);
+            color: #e0e0e0;
+            border: 1px solid rgba(100, 100, 150, 0.3);
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            background: rgba(40, 50, 90, 0.7);
+            border-color: rgba(120, 120, 180, 0.5);
+        }
+
+        .confirmation-message {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(20, 40, 20, 0.5);
+            border: 1px solid rgba(80, 160, 80, 0.3);
+            color: #a0e0a0;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem 0;
+            color: #606080;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(100, 100, 150, 0.1);
+        }
+
+        .timestamp {
+            color: #6a8fc5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+<div class="logo">
+    <img src="New Project.png" alt="Loss Line">
+
+</div>
+
+            </div>
+            <h1>Frontline Daily</h1>
+            <a href="https://x.com/FrontlineDaily" class="twitter-link" target="_blank">
+                <i class="fab fa-twitter"></i> @FrontlineDailySol
+            </a>
+        </header>
+
+        <div class="main-content">
+            <div class="live-feed-container">
+                <div class="live-feed-title">
+                    <i class="fas fa-broadcast-tower"></i> Live News Feed
+                </div>
+                <div class="live-feed">
+                    <div class="feed-items" id="feedItems">
+                        <!-- Feed items will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="archive-container">
+                <h2 class="archive-title">
+                    <i class="fas fa-archive"></i> Archive of the Day
+                </h2>
+                <div class="archive-items">
+                    <div class="archive-item">
+                        <div class="archive-token">$NEO</div>
+                        <div class="archive-description">Dev disappeared mid-space call, liquidity drained shortly after.</div>
+                        <div class="archive-time">Incident Time: <span class="timestamp">08:14 UTC</span></div>
+                    </div>
+                    <div class="archive-item">
+                        <div class="archive-token">$Orb</div>
+                        <div class="archive-description">Holder count collapsing after failed marketing campaign.</div>
+                        <div class="archive-time">Incident Time: <span class="timestamp">09:27 UTC</span></div>
+                    </div>
+                    <div class="archive-item">
+                        <div class="archive-token">$CZSTATUE</div>
+                        <div class="archive-description">Declared a historical rug after -99% drop in 3 hours.</div>
+                        <div class="archive-time">Incident Time: <span class="timestamp">12:40 UTC</span></div>
+                    </div>
+                    <div class="archive-item">
+                        <div class="archive-token">$VIBE</div>
+                        <div class="archive-description">Whale dump triggered cascade liquidation of leveraged positions.</div>
+                        <div class="archive-time">Incident Time: <span class="timestamp">14:22 UTC</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="submission-container">
+            <h2 class="submission-title">
+                <i class="fas fa-paper-plane"></i> Submit a Report
+            </h2>
+            <form id="reportForm">
+                <div class="form-group">
+                    <label for="tokenName">Token Name</label>
+                    <input type="text" id="tokenName" required>
+                </div>
+                <div class="form-group">
+                    <label for="incidentDescription">Description / Incident Summary</label>
+                    <textarea id="incidentDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="twitterHandle">Reporter's Twitter Handle</label>
+                    <input type="text" id="twitterHandle">
+                </div>
+                <button type="submit">
+                    <i class="fas fa-file-export"></i> Submit Report to Frontline
+                </button>
+            </form>
+            <div class="confirmation-message" id="confirmationMessage">
+                Report logged. Your name will be remembered.
+            </div>
+        </div>
+
+        <footer>
+            <p>Frontline Daily &copy;  | Documenting the fallen with reverence</p>
+        </footer>
+    </div>
+
+    <script>
+        // Sample data for the live feed
+        const feedData = [
+            { time: "08:14 UTC", token: "$TNEO", change: "-42%", description: "Dev disappeared mid-space", type: "negative" },
+            { time: "09:27 UTC", token: "$FUN", change: "-61%", description: "Holder count collapsing", type: "negative" },
+            { time: "11:03 UTC", token: "$USCR", change: "+12%", description: "Survivors reporting false hope", type: "positive" },
+            { time: "12:40 UTC", token: "$COIN", change: "-99%", description: "Declared a historical rug", type: "negative" },
+            { time: "13:15 UTC", token: "$BULLISH", change: "-78%", description: "Whale exit triggers panic selling", type: "negative" },
+            { time: "14:30 UTC", token: "$NEO", change: "-45%", description: "Team announces project abandonment", type: "negative" },
+            { time: "15:42 UTC", token: "$SAFE", change: "-67%", description: "Exploit drains treasury funds", type: "negative" },
+            { time: "16:18 UTC", token: "$ZERO", change: "-92%", description: "Rug pull confirmed by on-chain data", type: "negative" },
+            { time: "17:05 UTC", token: "$PURE", change: "+8%", description: "Dead cat bounce observed", type: "positive" },
+            { time: "18:22 UTC", token: "$DARK", change: "-54%", description: "Liquidity migration fails", type: "negative" }
+        ];
+
+        // Function to populate the live feed
+        function populateFeed() {
+            const feedItems = document.getElementById('feedItems');
+            
+            // Create two sets of the same data for seamless looping
+            const doubledData = [...feedData, ...feedData];
+            
+            doubledData.forEach((item, index) => {
+                const feedItem = document.createElement('div');
+                feedItem.className = 'feed-item';
+                feedItem.style.animationDelay = `${index * 0.2}s`;
+                
+                feedItem.innerHTML = `
+                    <span class="feed-time">[${item.time}]</span>
+                    <span class="feed-token">${item.token}</span>
+                    <span class="feed-change ${item.type}">${item.change}</span>
+                    <span class="feed-description">| ${item.description}</span>
+                `;
+                
+                feedItems.appendChild(feedItem);
+            });
+        }
+
+        // Handle form submission
+        document.getElementById('reportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show confirmation message
+            const confirmation = document.getElementById('confirmationMessage');
+            confirmation.style.display = 'block';
+            
+            // Reset form
+            this.reset();
+            
+            // Hide confirmation after 5 seconds
+            setTimeout(() => {
+                confirmation.style.display = 'none';
+            }, 5000);
+        });
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            populateFeed();
+        });
+    </script>
+</body>
+</html>
